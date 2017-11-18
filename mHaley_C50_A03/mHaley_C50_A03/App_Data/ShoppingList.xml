@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <shoppingList>
-  <entry>
+  <shoppingEntry>
     <quantity>1</quantity>
-    <productName>apple</productName>
-    <productPrice>0.99</productPrice>
-    <productCategory>produce</productCategory>
-  </entry>
+    <product category="produce">
+      <name>apple</name>
+      <price>0.99</price>
+    </product>
+  </shoppingEntry>
 </shoppingList>
