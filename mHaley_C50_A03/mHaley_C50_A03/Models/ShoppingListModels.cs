@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using WebGrease.Css.Extensions;
 
 namespace mHaley_C50_A03.Models
@@ -75,17 +76,27 @@ namespace mHaley_C50_A03.Models
             {
                 var entries = new List<ShoppingListEntry>();
                 // ReSharper disable once AssignNullToNotNullAttribute
+                if (!XmlIsValid())
+                {
+                    return null;
+                }
+
+                // ReSharper disable once AssignNullToNotNullAttribute
                 XElement shoppingListXmlElement = XElement.Load(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+                XNamespace ns = "http://tempuri.org/ShoppingList.xsd";
                 IEnumerable<XElement> entryElements =
                     from x in shoppingListXmlElement.Elements()
                     select x;
 
                 entryElements.ForEach(entry =>
                 {
-                    entries.Add(new ShoppingListEntry(int.Parse(entry.Element("quantity").Value),
-                        entry.Element("product").Element("name").Value, 
-                        decimal.Parse(entry.Element("product").Element("price").Value),
-                        entry.Element("product").Attribute("category").Value.ToString()));
+                    entries.Add(new ShoppingListEntry
+                    {
+                        Quantity = int.Parse(entry.Element(ns + "quantity").Value),
+                        ProductCategory = entry.Element(ns + "product").Attribute("category").Value,
+                        ProductName = entry.Element(ns + "product").Element(ns + "name").Value,
+                        ProductPrice = decimal.Parse(entry.Element(ns + "product").Element(ns + "price").Value)
+                    });
                 });
 
                 return entries;
@@ -95,6 +106,24 @@ namespace mHaley_C50_A03.Models
                 return null;
             }
         }// GetShoppingListFromXml()
+
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        private static bool XmlIsValid()
+        {
+            var isValid = true;
+            XDocument document = XDocument.Load(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+            var schemaSet = new XmlSchemaSet();
+
+            schemaSet.Add("http://tempuri.org/ShoppingList.xsd",
+                HostingEnvironment.MapPath("~/App_Data/ShoppingList.xsd"));
+
+            document.Validate(schemaSet, (o, e) =>
+            {
+                isValid = false;
+            });
+
+            return isValid;
+        }
     }// ShoppingList
 
     public class ShoppingListEntry

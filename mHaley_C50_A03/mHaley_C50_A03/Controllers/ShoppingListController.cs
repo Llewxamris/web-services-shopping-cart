@@ -17,11 +17,11 @@ namespace mHaley_C50_A03.Controllers
         //    return View();
         //}
 
-        //// GET: ShoppingList/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        // GET: ShoppingList/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
 
         // POST: ShoppingList/Create
         [HttpPost]
