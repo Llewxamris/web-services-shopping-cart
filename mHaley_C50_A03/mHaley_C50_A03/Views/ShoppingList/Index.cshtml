@@ -27,7 +27,9 @@
         <th></th>
     </tr>
 
+@{ decimal totalPrice = 0; }
 @foreach (ShoppingListEntry item in Model) {
+    totalPrice += item.ProductPrice;
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Quantity)
@@ -48,5 +50,14 @@
         </td>
     </tr>
 }
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            <strong>List Total:</strong> $@totalPrice
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
 
 </table>

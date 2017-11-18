@@ -7,4 +7,11 @@
       <price>0.99</price>
     </product>
   </shoppingEntry>
+  <shoppingEntry>
+    <quantity>7</quantity>
+    <product category="dry/baking goods">
+      <name>rotini</name>
+      <price>1.29</price>
+    </product>
+  </shoppingEntry>
 </shoppingList>
