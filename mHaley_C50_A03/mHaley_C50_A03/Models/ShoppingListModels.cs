@@ -44,6 +44,18 @@ namespace mHaley_C50_A03.Models
             }
         }// ReplaceEntryInList(...)
 
+        public static void DeleteEntryInList(string name)
+        {
+            Entries.RemoveAll(entry => entry.ProductName == name);
+            // TODO: Write to XML
+        }// DeleteEntryInList(...)
+
+        public static void DeleteAllEntries()
+        {
+            Entries.Clear();
+            // TODO: Write to XML
+        }// DeleteAllEntries()
+
         public static ShoppingListEntry GetSpecificEntry(string name)
         {
             return Entries.Find(entry => entry.ProductName == name);

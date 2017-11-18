@@ -275,6 +275,8 @@
     <Content Include="Views\ShoppingList\Index.cshtml" />
     <Content Include="Views\ShoppingList\Create.cshtml" />
     <Content Include="Views\ShoppingList\Edit.cshtml" />
+    <Content Include="Views\ShoppingList\Delete.cshtml" />
+    <Content Include="Views\ShoppingList\DeleteAll.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

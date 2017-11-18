@@ -11,17 +11,17 @@ namespace mHaley_C50_A03.Controllers
             return View(ShoppingList.GetAllEntries());
         }
 
-        // GET: ShoppingList/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //// GET: ShoppingList/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
 
-        // GET: ShoppingList/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: ShoppingList/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
         // POST: ShoppingList/Create
         [HttpPost]
@@ -38,13 +38,13 @@ namespace mHaley_C50_A03.Controllers
             }
         }
 
-        // GET: ShoppingList/Edit/5
+        // GET: ShoppingList/Edit/apple
         public ActionResult Edit(string name)
         {
             return View(ShoppingList.GetSpecificEntry(name));
         }
 
-        // POST: ShoppingList/Edit/5
+        // POST: ShoppingList/Edit/apple
         [HttpPost]
         public ActionResult Edit(ShoppingListEntry changeShoppingListEntry)
         {
@@ -59,20 +59,40 @@ namespace mHaley_C50_A03.Controllers
             }
         }
 
-        // GET: ShoppingList/Delete/5
-        public ActionResult Delete(int id)
+        // GET: ShoppingList/Delete/apple
+        public ActionResult Delete(string name)
+        {
+            return View(ShoppingList.GetSpecificEntry(name));
+        }
+
+        // POST: ShoppingList/Delete/apple
+        [HttpPost]
+        public ActionResult Delete(ShoppingListEntry deletedShoppingListEntry, string name)
+        {
+            try
+            {
+                ShoppingList.DeleteEntryInList(name);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: ShoppingList/DeleteAll
+        public ActionResult DeleteAll()
         {
             return View();
         }
 
-        // POST: ShoppingList/Delete/5
+        // POST: ShoppingList/DeleteAll
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult DeleteAll(byte? _)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                ShoppingList.DeleteAllEntries();
                 return RedirectToAction("Index");
             }
             catch
