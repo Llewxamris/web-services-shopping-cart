@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Web;
 using System.Web.Hosting;
 using System.Xml.Linq;
 using WebGrease.Css.Extensions;
@@ -23,15 +20,39 @@ namespace mHaley_C50_A03.Models
         private static List<ShoppingListEntry> Entries => _instance ??
             (_instance = GetShoppingListFromXml());
 
-        public static void AddEntryToList(ShoppingListEntry shoppingListEntry)
+        public static void AddEntryToList(ShoppingListEntry newShoppingListEntry)
         {
-            Entries.Add(shoppingListEntry);
-        }
+            Entries.Add(newShoppingListEntry);
+            // TODO: Write to XML
+        }// AddEntryToList(...)
+
+        public static void ReplaceEntryInList(ShoppingListEntry changedShoppingListEntry)
+        {
+            ShoppingListEntry oldShoppingListEntry = GetSpecificEntry(changedShoppingListEntry.ProductName);
+
+            if (oldShoppingListEntry == null)
+            {
+                AddEntryToList(changedShoppingListEntry);
+            }
+            else
+            {
+                oldShoppingListEntry.ProductName = changedShoppingListEntry.ProductName;
+                oldShoppingListEntry.ProductCategory = changedShoppingListEntry.ProductCategory;
+                oldShoppingListEntry.ProductPrice = changedShoppingListEntry.ProductPrice;
+                oldShoppingListEntry.Quantity = changedShoppingListEntry.Quantity;
+                // TODO: Write to XML
+            }
+        }// ReplaceEntryInList(...)
+
+        public static ShoppingListEntry GetSpecificEntry(string name)
+        {
+            return Entries.Find(entry => entry.ProductName == name);
+        }// GetSpecificEntry(...)
 
         public static List<ShoppingListEntry> GetAllEntries()
         {
             return Entries;
-        }
+        }// GetAllEntries()
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static List<ShoppingListEntry> GetShoppingListFromXml()

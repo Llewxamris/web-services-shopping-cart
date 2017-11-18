@@ -39,19 +39,18 @@ namespace mHaley_C50_A03.Controllers
         }
 
         // GET: ShoppingList/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string name)
         {
-            return View();
+            return View(ShoppingList.GetSpecificEntry(name));
         }
 
         // POST: ShoppingList/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(ShoppingListEntry changeShoppingListEntry)
         {
             try
             {
-                // TODO: Add update logic here
-
+                ShoppingList.ReplaceEntryInList(changeShoppingListEntry);
                 return RedirectToAction("Index");
             }
             catch

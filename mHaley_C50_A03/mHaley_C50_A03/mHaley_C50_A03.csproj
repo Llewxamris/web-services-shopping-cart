@@ -274,6 +274,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\ShoppingList\Index.cshtml" />
     <Content Include="Views\ShoppingList\Create.cshtml" />
+    <Content Include="Views\ShoppingList\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
