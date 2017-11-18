@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <shoppingList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns="http://tempuri.org/ShoppingList.xsd">
+              xmlns="http://tempuri.org/ShoppingList.xsd">
   <shoppingEntry>
     <quantity>1</quantity>
     <product category="Produce">

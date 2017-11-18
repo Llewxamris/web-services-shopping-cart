@@ -24,7 +24,7 @@ namespace mHaley_C50_A03.Models
         public static void AddEntryToList(ShoppingListEntry newShoppingListEntry)
         {
             Entries.Add(newShoppingListEntry);
-            // TODO: Write to XML
+            WriteToXmlFile();
         }// AddEntryToList(...)
 
         public static void ReplaceEntryInList(ShoppingListEntry changedShoppingListEntry)
@@ -41,20 +41,20 @@ namespace mHaley_C50_A03.Models
                 oldShoppingListEntry.ProductCategory = changedShoppingListEntry.ProductCategory;
                 oldShoppingListEntry.ProductPrice = changedShoppingListEntry.ProductPrice;
                 oldShoppingListEntry.Quantity = changedShoppingListEntry.Quantity;
-                // TODO: Write to XML
+                WriteToXmlFile();
             }
         }// ReplaceEntryInList(...)
 
         public static void DeleteEntryInList(string name)
         {
             Entries.RemoveAll(entry => entry.ProductName == name);
-            // TODO: Write to XML
+            WriteToXmlFile();
         }// DeleteEntryInList(...)
 
         public static void DeleteAllEntries()
         {
             Entries.Clear();
-            // TODO: Write to XML
+            WriteToXmlFile();
         }// DeleteAllEntries()
 
         public static ShoppingListEntry GetSpecificEntry(string name)
@@ -66,6 +66,26 @@ namespace mHaley_C50_A03.Models
         {
             return Entries;
         }// GetAllEntries()
+
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+        private static void WriteToXmlFile()
+        {
+            XElement shoppingListXmlElement = XElement.Load(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+            XNamespace ns = "http://tempuri.org/ShoppingList.xsd";
+            shoppingListXmlElement.RemoveAll();
+
+            Entries.ForEach(entry =>
+            {
+                shoppingListXmlElement.Add(new XElement(ns + "shoppingEntry", 
+                    new XElement(ns + "quantity", entry.Quantity),
+                    new XElement(ns + "product", 
+                        new XAttribute("category", entry.ProductCategory),
+                        new XElement(ns + "name", entry.ProductName),
+                        new XElement(ns + "price", entry.ProductPrice))));
+            });
+
+            shoppingListXmlElement.Save(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+        }
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static List<ShoppingListEntry> GetShoppingListFromXml()
