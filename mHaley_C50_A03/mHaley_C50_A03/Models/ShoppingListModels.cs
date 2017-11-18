@@ -20,8 +20,18 @@ namespace mHaley_C50_A03.Models
          * memory. */
         private static List<ShoppingListEntry> _instance;
 
-        public static List<ShoppingListEntry> Entries => _instance ??
+        private static List<ShoppingListEntry> Entries => _instance ??
             (_instance = GetShoppingListFromXml());
+
+        public static void AddEntryToList(ShoppingListEntry shoppingListEntry)
+        {
+            Entries.Add(shoppingListEntry);
+        }
+
+        public static List<ShoppingListEntry> GetAllEntries()
+        {
+            return Entries;
+        }
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static List<ShoppingListEntry> GetShoppingListFromXml()
@@ -87,5 +97,6 @@ namespace mHaley_C50_A03.Models
             ProductPrice = productPrice;
             ProductCategory = productCategory;
         }// ShoppingListEntry(...)
+
     }// ShoppingListEntry
 }

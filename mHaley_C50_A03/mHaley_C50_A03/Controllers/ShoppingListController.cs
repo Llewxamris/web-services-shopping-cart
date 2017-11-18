@@ -8,7 +8,7 @@ namespace mHaley_C50_A03.Controllers
         // GET: ShoppingList
         public ActionResult Index()
         {
-            return View(ShoppingList.Entries);
+            return View(ShoppingList.GetAllEntries());
         }
 
         // GET: ShoppingList/Details/5
@@ -25,12 +25,11 @@ namespace mHaley_C50_A03.Controllers
 
         // POST: ShoppingList/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ShoppingListEntry newShoppingListEntry)
         {
             try
             {
-                // TODO: Add insert logic here
-
+                ShoppingList.AddEntryToList(newShoppingListEntry);
                 return RedirectToAction("Index");
             }
             catch
