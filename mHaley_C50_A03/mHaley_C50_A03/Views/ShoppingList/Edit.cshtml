@@ -1,11 +1,12 @@
-﻿@model mHaley_C50_A03.Models.ShoppingListEntry
+﻿@using mHaley_C50_A03.Models
+@model ShoppingListEntry
 
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Edit</h2>
-
+@Html.Partial("~/Views/Shared/_Header.cshtml");
 
 @using (Html.BeginForm())
 {

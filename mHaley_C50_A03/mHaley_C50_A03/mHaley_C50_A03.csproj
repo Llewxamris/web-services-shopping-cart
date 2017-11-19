@@ -280,6 +280,7 @@
     <Content Include="Views\ShoppingList\Edit.cshtml" />
     <Content Include="Views\ShoppingList\Delete.cshtml" />
     <Content Include="Views\ShoppingList\DeleteAll.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
