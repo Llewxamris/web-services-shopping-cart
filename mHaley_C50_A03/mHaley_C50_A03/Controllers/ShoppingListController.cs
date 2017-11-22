@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using mHaley_C50_A03.Models;
 
 namespace mHaley_C50_A03.Controllers
@@ -101,9 +102,10 @@ namespace mHaley_C50_A03.Controllers
             }
         }
 
-        public ActionResult QuickDetails()
+        public ActionResult GetJson()
         {
-            return Json("null");
+            string jsonShoppingList = new JavaScriptSerializer().Serialize(ShoppingList.GetAllEntries());
+            return Json(jsonShoppingList, JsonRequestBehavior.AllowGet);
         }
     }
 }

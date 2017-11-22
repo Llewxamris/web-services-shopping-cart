@@ -10,7 +10,10 @@
 <h2>View List</h2>
 
 <p>
-    @*@Html.ActionLink("Quick Details", "QuickDetails")*@
+    <span id="getJson"><a href="#">Get JSON Values</a></span>
+</p>
+<p>
+    <pre id="jsonOutput" class="hidden"></pre>
 </p>
 <table class="table">
     <tr>
@@ -60,5 +63,25 @@
         <td></td>
         <td>@Html.ActionLink("Create New", "Create") | <span class="delete">@Html.ActionLink("Delete All", "DeleteAll")</span></td>
     </tr>
-
 </table>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+
+    <script>
+        $("#getJson").click(() => {
+            $.ajax({
+                url: '@Url.Action("GetJson", "ShoppingList")',
+                type: "GET",
+                success: data => {
+                    $("#jsonOutput").text("---For use in importing to other applications ---\n");
+                    $("#jsonOutput").append(data);
+                    $("#jsonOutput").removeClass("hidden");
+                },
+                error: error => {
+                    alert(error);
+                }
+            });
+        });
+    </script>
+}
