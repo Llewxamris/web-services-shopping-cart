@@ -2,15 +2,15 @@
 @model IEnumerable<ShoppingListEntry>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "View List";
 }
 
-@Html.Partial("~/Views/Shared/_Header.cshtml");
+@Html.Partial("~/Views/Shared/_Header.cshtml")
 
-<h2>Index</h2>
+<h2>View List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink("Quick Details", "QuickDetails")*@
 </p>
 <table class="table">
     <tr>
@@ -29,29 +29,28 @@
         <th></th>
     </tr>
 
-@{ decimal totalPrice = 0; }
-@foreach (ShoppingListEntry item in Model) {
-    totalPrice += item.ProductPrice;
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductCategory)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {  name=item.ProductName  }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { name=item.ProductName  })
-        </td>
-    </tr>
-}
+    @{ decimal totalPrice = 0; }
+    @foreach (ShoppingListEntry item in Model) {
+        totalPrice += item.ProductPrice;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductCategory)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  name=item.ProductName  }) |
+                <span class="delete">@Html.ActionLink("Remove", "Delete", new { name=item.ProductName  })</span>
+            </td>
+        </tr>
+    }
     <tr>
         <td></td>
         <td></td>
@@ -59,7 +58,7 @@
             <strong>List Total:</strong> $@totalPrice
         </td>
         <td></td>
-        <td>@Html.ActionLink("Delete All", "DeleteAll")</td>
+        <td>@Html.ActionLink("Create New", "Create") | <span class="delete">@Html.ActionLink("Delete All", "DeleteAll")</span></td>
     </tr>
 
 </table>

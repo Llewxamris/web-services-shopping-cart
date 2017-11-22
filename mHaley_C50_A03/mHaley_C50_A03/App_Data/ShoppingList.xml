@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<shoppingList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xmlns="http://tempuri.org/ShoppingList.xsd">
+<shoppingList xmlns="http://tempuri.org/ShoppingList.xsd">
   <shoppingEntry>
     <quantity>1</quantity>
     <product category="Produce">
@@ -14,6 +12,13 @@
     <product category="Dry/Baking Goods">
       <name>Rotini</name>
       <price>1.29</price>
+    </product>
+  </shoppingEntry>
+  <shoppingEntry>
+    <quantity>1</quantity>
+    <product category="Produce">
+      <name>Carrot</name>
+      <price>0.50</price>
     </product>
   </shoppingEntry>
 </shoppingList>

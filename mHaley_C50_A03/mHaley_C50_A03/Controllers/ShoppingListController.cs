@@ -11,11 +11,11 @@ namespace mHaley_C50_A03.Controllers
             return View(ShoppingList.GetAllEntries());
         }
 
-        //// GET: ShoppingList/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
+        // GET: ShoppingList/Details
+        public ActionResult Details(string name)
+        {
+            return View();
+        }
 
         // GET: ShoppingList/Create
         public ActionResult Create()
@@ -99,6 +99,11 @@ namespace mHaley_C50_A03.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult QuickDetails()
+        {
+            return Json("null");
         }
     }
 }
