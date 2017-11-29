@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ShoppingList"
+    targetNamespace="http://tempuri.org/ShoppingList.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/ShoppingList.xsd"
+    xmlns:mstns="http://tempuri.org/ShoppingList.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="shoppingList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="shoppingEntry" type="entryType" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="entryType">
+    <xs:group ref="entryChildElements" />
+  </xs:complexType>
+
+  <xs:group name="entryChildElements">
+    <xs:sequence>
+      <xs:element name="quantity" type="xs:positiveInteger" />
+      <xs:element name="product" type="productType" />
+    </xs:sequence>
+  </xs:group>
+
+  <xs:complexType name="productType">
+    <xs:group ref="productChildElements" />
+    <xs:attributeGroup ref="productAttributes" />
+  </xs:complexType>
+
+  <xs:group name="productChildElements">
+    <xs:sequence>
+      <xs:element name="name" type="nameString" />
+      <xs:element name="price" type="xs:decimal" />
+    </xs:sequence>
+  </xs:group>
+
+  <xs:simpleType name="nameString">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="20" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:attributeGroup name="productAttributes">
+    <xs:attribute name="category" type="categoryEnum" />
+  </xs:attributeGroup>
+
+  <xs:simpleType name="categoryEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Beverages" />
+      <xs:enumeration value="Bread/Bakery" />
+      <xs:enumeration value="Canned/Jarred Goods" />
+      <xs:enumeration value="Dairy" />
+      <xs:enumeration value="Dry/Baking Goods" />
+      <xs:enumeration value="Frozen Foods" />
+      <xs:enumeration value="Meat" />
+      <xs:enumeration value="Produce" />
+      <xs:enumeration value="Cleaners" />
+      <xs:enumeration value="Paper Goods" />
+      <xs:enumeration value="Personal Care" />
+      <xs:enumeration value="Other" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
