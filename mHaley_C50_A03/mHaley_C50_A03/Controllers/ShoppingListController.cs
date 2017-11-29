@@ -12,12 +12,6 @@ namespace mHaley_C50_A03.Controllers
             return View(ShoppingList.GetAllEntries());
         }
 
-        // GET: ShoppingList/Details
-        public ActionResult Details(string name)
-        {
-            return View();
-        }
-
         // GET: ShoppingList/Create
         public ActionResult Create()
         {
