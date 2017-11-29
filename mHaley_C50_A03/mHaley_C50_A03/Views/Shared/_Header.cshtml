@@ -1,6 +1,12 @@
 ﻿@{
     DateTime theDate = DateTime.Now;
 }
+
+<navbar>
+        @Html.ActionLink("Shopping List", "Index", "ShoppingList", new {}, null) |
+        @Html.ActionLink("Shopping Cart", "Index","ShoppingCart", new {}, null)
+</navbar>
+
 <header>
     <h1>Your Online Shopping List</h1>
     <h3>Accessed on @theDate</h3>
