@@ -56,14 +56,14 @@ Based on the Shopping list site built in A03, with additional services.
     7. A detailed receipt is shown.  (not tax, just simple total, # items)
 
 ## Part B: Service References in C# .NET
-Black box requirements:
+### Black box requirements:
     1. Create a page where User selects a 2 digit country code (i.e from a pull 
 		down.)
     2. Given that Country, a list of cities from that country appear.
     3. If the user selects one of the cities, the latitude, longitude and 
 		weather for that city appears
 
-Implementation notes:
+### Implementation notes:
     1. Use the same project at Part A, just put this in a new Controller/view.  
 		Have a “Cities” link in the shared Nav bar.  (We are doing this to 
 		reduce the project overhead so that you can submit both parts and it 
