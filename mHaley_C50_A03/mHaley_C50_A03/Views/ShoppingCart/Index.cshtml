@@ -7,3 +7,21 @@
 
 <h2>Index</h2>
 
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+
+    <script>
+        (() => {
+            $.ajax({
+                url: '@Url.Action("GetJson", "ShoppingList", new {}, null)',
+                type: "GET",
+                success: data => {
+                    console.log(data);
+                },
+                error: error => {
+                    alert(error);
+                }
+            });
+        });
+    </script>
+}

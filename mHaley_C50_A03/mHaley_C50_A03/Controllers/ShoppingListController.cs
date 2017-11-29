@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using mHaley_C50_A03.Models;
 
@@ -100,6 +101,12 @@ namespace mHaley_C50_A03.Controllers
         {
             string jsonShoppingList = new JavaScriptSerializer().Serialize(ShoppingList.GetAllEntries());
             return Json(jsonShoppingList, JsonRequestBehavior.AllowGet);
+        }
+
+        public string DeleteAllFromList()
+        {
+            ShoppingList.DeleteAllEntries();
+            return "Success";
         }
     }
 }
