@@ -6,12 +6,23 @@
 @Html.Partial("~/Views/Shared/_Header.cshtml")
 
 <h2>Index</h2>
+<div class="gridContainer">
+    <div id="shoppingList">
+        <h2>Shopping List</h2>
+        <div id="shoppingListZone">
+        </div>
+    </div>
 
-<div id="content">
-</div>
-<div id="totals">
-    <h3>Total Items:</h3><span id="totalEntries"></span>
-    <h3>Total Price:</h3><span id="totalValue"></span>
+    <div id="shoppingCart">
+        <h1>Cart</h1>
+        <div id="shoppingCartZone">
+        </div>
+    </div>
+
+    <div id="totals">
+        <h3>Total Items:</h3><span id="totalEntries"></span>
+        <h3>Total Price:</h3><span id="totalValue"></span>
+    </div>
 </div>
 
 @section Scripts {
@@ -25,49 +36,61 @@
         //    this.productCategory = productCatergory;
         //}
 
-        // ReSharper disable once PossiblyUnassignedProperty
-        const getShoppingList = fetch('@Url.Action("GetJson", "ShoppingList", new {}, null)')
-            .then(response => {
-                return response.json();
-            }).then(data => {
-                return (JSON.parse(data));
-            }).then(jsonArr => {
-                jsonArr.forEach((obj) => {
-                    const entryDiv = document.createElement("div");
-                    const quantitySpan = document.createElement("div");
-                    const nameSpan = document.createElement("div");
-                    const priceSpan = document.createElement("div");
-                    const categorySpan = document.createElement("div");
-                    const breakTag = document.createElement('br');
+        function getShoppingList() {
+            // ReSharper disable once PossiblyUnassignedPropertys
+            fetch('@Url.Action("GetJson", "ShoppingList", new {}, null)')
+                    .then(response => {
+                        return response.json();
+                    }).then(data => {
+                        return (JSON.parse(data));
+                    }).then(jsonArr => {
+                        jsonArr.forEach((obj) => {
+                            const entryDiv = document.createElement("div");
+                            const quantitySpan = document.createElement("div");
+                            const nameSpan = document.createElement("div");
+                            const priceSpan = document.createElement("div");
+                            const categorySpan = document.createElement("div");
+                            const breakTag = document.createElement('br');
 
-                    entryDiv.id = obj.ProductName;
-                    quantitySpan.className = 'quantity';
-                    nameSpan.className = 'productName';
-                    priceSpan.className = 'productPrice';
-                    categorySpan.className = 'productCategory';
+                            entryDiv.id = obj.ProductName;
+                            entryDiv.draggable = true;
+                            entryDiv.addEventListener('dragstart',
+                                ev => {
+                                    console.log("dragstart");
+                                    ev.dataTransfer.setData("text/plain", ev.target.id);
+                                    ev.dropEffect = 'move';
+                                });
 
-                    quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
-                    nameSpan.textContent = `Name: ${obj.ProductName}`;
-                    priceSpan.textContent = `Price: ${obj.ProductPrice}`;
-                    categorySpan.textContent = `Category: ${obj.ProductCategory}`;
+                            quantitySpan.className = 'quantity';
+                            nameSpan.className = 'productName';
+                            priceSpan.className = 'productPrice';
+                            categorySpan.className = 'productCategory';
+
+                            quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
+                            nameSpan.textContent = `Name: ${obj.ProductName}`;
+                            priceSpan.textContent = `Price: ${obj.ProductPrice}`;
+                            categorySpan.textContent = `Category: ${obj.ProductCategory}`;
 
 
-                    entryDiv.appendChild(quantitySpan);
-                    entryDiv.appendChild(nameSpan);
-                    entryDiv.appendChild(priceSpan);
-                    entryDiv.appendChild(categorySpan);
-                    entryDiv.appendChild(categorySpan);
-                    entryDiv.appendChild(breakTag);
+                            entryDiv.appendChild(quantitySpan);
+                            entryDiv.appendChild(nameSpan);
+                            entryDiv.appendChild(priceSpan);
+                            entryDiv.appendChild(categorySpan);
+                            entryDiv.appendChild(categorySpan);
+                            entryDiv.appendChild(breakTag);
 
-                    document.getElementById("content").appendChild(entryDiv);
-                });
+                            document.getElementById("shoppingListZone").appendChild(entryDiv);
+                        });
 
-                document.getElementById("totalValue").innerText = calculateTotalCost(jsonArr).toFixed(2);
-                document.getElementById("totalEntries").innerText = calculateTotalEntries(jsonArr);
-                console.log(calculateTotalCost(jsonArr));
-            });
 
-         function calculateTotalCost(entries) {
+
+                        document.getElementById("totalValue").innerText = calculateTotalCost(jsonArr).toFixed(2);
+                        document.getElementById("totalEntries").innerText = calculateTotalEntries(jsonArr);
+                        console.log(calculateTotalCost(jsonArr));
+                    });
+        }
+
+        function calculateTotalCost(entries) {
             let totalCost = 0.0;
 
             entries.forEach(obj => {
@@ -85,6 +108,36 @@
             });
             return totalEntries;
         }
+
+        function drag(ev) {
+            ev.preventDefault();
+        }
+
+        document.getElementById('shoppingListZone').addEventListener('dragover', ev => {
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = "move";
+            console.log('dragover');
+        });
+
+        document.getElementById('shoppingListZone').addEventListener('drop', ev => {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+            console.log('drop');
+        });
+
+        document.getElementById("shoppingCartZone").addEventListener('dragover', ev => {
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = "move";
+            console.log('dragover');
+        });
+
+        document.getElementById('shoppingCartZone').addEventListener('drop', ev => {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+            console.log('drop');
+        });
 
         getShoppingList();
     </script>

@@ -44,3 +44,35 @@ a:hover {
 .delete a {
     color: red;
 }
+
+.gridContainer {
+    display: grid;
+    /* ReSharper disable once InvalidValue */
+    grid-template-columns: [shopping-list]50%, [shopping-cart]50%;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "list cart"
+        "totals totals";
+    grid-column-gap: 10%;
+}
+
+#shoppingList {
+    grid-area: list;
+}
+
+#shoppingListZone, #shoppingCartZone {
+    border: 5px dashed black;
+    padding-bottom: 30%;
+}
+
+#shoppingCart {
+    grid-area: cart;
+}
+
+#totals {
+    grid-area: totals;
+}
+
+#totals h3 {
+    display: inline;
+}
