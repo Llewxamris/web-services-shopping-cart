@@ -7,21 +7,85 @@
 
 <h2>Index</h2>
 
+<div id="content">
+</div>
+<div id="totals">
+    <h3>Total Items:</h3><span id="totalEntries"></span>
+    <h3>Total Price:</h3><span id="totalValue"></span>
+</div>
+
 @section Scripts {
     @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
 
     <script>
-        (() => {
-            $.ajax({
-                url: '@Url.Action("GetJson", "ShoppingList", new {}, null)',
-                type: "GET",
-                success: data => {
-                    console.log(data);
-                },
-                error: error => {
-                    alert(error);
-                }
+        //let shoppingEntry = (quantity, productName, productPrice, productCatergory) => {
+        //    this.quantity = quantity;
+        //    this.productName = productName;
+        //    this.productPrice = productPrice;
+        //    this.productCategory = productCatergory;
+        //}
+
+        // ReSharper disable once PossiblyUnassignedProperty
+        const getShoppingList = fetch('@Url.Action("GetJson", "ShoppingList", new {}, null)')
+            .then(response => {
+                return response.json();
+            }).then(data => {
+                return (JSON.parse(data));
+            }).then(jsonArr => {
+                jsonArr.forEach((obj) => {
+                    const entryDiv = document.createElement("div");
+                    const quantitySpan = document.createElement("div");
+                    const nameSpan = document.createElement("div");
+                    const priceSpan = document.createElement("div");
+                    const categorySpan = document.createElement("div");
+                    const breakTag = document.createElement('br');
+
+                    entryDiv.id = obj.ProductName;
+                    quantitySpan.className = 'quantity';
+                    nameSpan.className = 'productName';
+                    priceSpan.className = 'productPrice';
+                    categorySpan.className = 'productCategory';
+
+                    quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
+                    nameSpan.textContent = `Name: ${obj.ProductName}`;
+                    priceSpan.textContent = `Price: ${obj.ProductPrice}`;
+                    categorySpan.textContent = `Category: ${obj.ProductCategory}`;
+
+
+                    entryDiv.appendChild(quantitySpan);
+                    entryDiv.appendChild(nameSpan);
+                    entryDiv.appendChild(priceSpan);
+                    entryDiv.appendChild(categorySpan);
+                    entryDiv.appendChild(categorySpan);
+                    entryDiv.appendChild(breakTag);
+
+                    document.getElementById("content").appendChild(entryDiv);
+                });
+
+                document.getElementById("totalValue").innerText = calculateTotalCost(jsonArr).toFixed(2);
+                document.getElementById("totalEntries").innerText = calculateTotalEntries(jsonArr);
+                console.log(calculateTotalCost(jsonArr));
             });
-        });
+
+         function calculateTotalCost(entries) {
+            let totalCost = 0.0;
+
+            entries.forEach(obj => {
+                totalCost += obj.ProductPrice * obj.Quantity;
+            });
+
+            return totalCost;
+        }
+
+        function calculateTotalEntries(entries) {
+            let totalEntries = 0;
+
+            entries.forEach(obj => {
+                totalEntries += obj.Quantity;
+            });
+            return totalEntries;
+        }
+
+        getShoppingList();
     </script>
 }
