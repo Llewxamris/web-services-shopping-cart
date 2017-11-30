@@ -39,55 +39,53 @@
         function getShoppingList() {
             // ReSharper disable once PossiblyUnassignedPropertys
             fetch('@Url.Action("GetJson", "ShoppingList", new {}, null)')
-                    .then(response => {
-                        return response.json();
-                    }).then(data => {
-                        return (JSON.parse(data));
-                    }).then(jsonArr => {
-                        jsonArr.forEach((obj) => {
-                            const entryDiv = document.createElement("div");
-                            const quantitySpan = document.createElement("div");
-                            const nameSpan = document.createElement("div");
-                            const priceSpan = document.createElement("div");
-                            const categorySpan = document.createElement("div");
-                            const breakTag = document.createElement('br');
+                .then(response => {
+                    return response.json();
+                }).then(data => {
+                    return (JSON.parse(data));
+                }).then(jsonArr => {
+                    jsonArr.forEach((obj) => {
+                        const entryDiv = document.createElement("div");
+                        const quantitySpan = document.createElement("div");
+                        const nameSpan = document.createElement("div");
+                        const priceSpan = document.createElement("div");
+                        const categorySpan = document.createElement("div");
+                        const breakTag = document.createElement('br');
 
-                            entryDiv.id = obj.ProductName;
-                            entryDiv.draggable = true;
-                            entryDiv.addEventListener('dragstart',
-                                ev => {
-                                    console.log("dragstart");
-                                    ev.dataTransfer.setData("text/plain", ev.target.id);
-                                    ev.dropEffect = 'move';
-                                });
+                        entryDiv.id = obj.ProductName;
+                        entryDiv.draggable = true;
+                        entryDiv.addEventListener('dragstart',
+                            ev => {
+                                console.log("dragstart");
+                                ev.dataTransfer.setData("text/plain", ev.target.id);
+                                ev.dropEffect = 'move';
+                            });
 
-                            quantitySpan.className = 'quantity';
-                            nameSpan.className = 'productName';
-                            priceSpan.className = 'productPrice';
-                            categorySpan.className = 'productCategory';
+                        quantitySpan.className = 'quantity';
+                        nameSpan.className = 'productName';
+                        priceSpan.className = 'productPrice';
+                        categorySpan.className = 'productCategory';
 
-                            quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
-                            nameSpan.textContent = `Name: ${obj.ProductName}`;
-                            priceSpan.textContent = `Price: ${obj.ProductPrice}`;
-                            categorySpan.textContent = `Category: ${obj.ProductCategory}`;
-
-
-                            entryDiv.appendChild(quantitySpan);
-                            entryDiv.appendChild(nameSpan);
-                            entryDiv.appendChild(priceSpan);
-                            entryDiv.appendChild(categorySpan);
-                            entryDiv.appendChild(categorySpan);
-                            entryDiv.appendChild(breakTag);
-
-                            document.getElementById("shoppingListZone").appendChild(entryDiv);
-                        });
+                        quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
+                        nameSpan.textContent = `Name: ${obj.ProductName}`;
+                        priceSpan.textContent = `Price: ${obj.ProductPrice}`;
+                        categorySpan.textContent = `Category: ${obj.ProductCategory}`;
 
 
+                        entryDiv.appendChild(quantitySpan);
+                        entryDiv.appendChild(nameSpan);
+                        entryDiv.appendChild(priceSpan);
+                        entryDiv.appendChild(categorySpan);
+                        entryDiv.appendChild(categorySpan);
+                        entryDiv.appendChild(breakTag);
 
-                        document.getElementById("totalValue").innerText = calculateTotalCost(jsonArr).toFixed(2);
-                        document.getElementById("totalEntries").innerText = calculateTotalEntries(jsonArr);
-                        console.log(calculateTotalCost(jsonArr));
+                        document.getElementById("shoppingListZone").appendChild(entryDiv);
                     });
+
+
+                    document.getElementById("totalValue").innerText = 0.00;
+                    document.getElementById("totalEntries").innerText = 0;
+                });
         }
 
         function calculateTotalCost(entries) {
@@ -100,45 +98,72 @@
             return totalCost;
         }
 
-        function calculateTotalEntries(entries) {
+        function updateTotalCost() {
+            const shoppingCartZone = document.getElementById('shoppingCartZone');
+            const shoppingCartEntries = shoppingCartZone.childNodes;
+            let totalCost = 0.0;
+
+            shoppingCartEntries.forEach(entry => {
+                console.log(entry);
+                if (entry.nodeType === 1) {
+                    const price = entry.querySelector('.productPrice').innerText.split(' ')[1];
+                    const quantity = entry.querySelector('.quantity').innerText.split(' ')[1];
+
+                    console.log(price);
+                    console.log(quantity);
+                    totalCost += parseFloat(price) * parseFloat(quantity);
+                }
+            });
+            console.log(totalCost);
+            document.getElementById("totalValue").innerText = totalCost.toFixed(2);
+        }
+
+        function updateTotalEntries() {
+            const shoppingCartZone = document.getElementById('shoppingCartZone');
+            const shoppingCartEntries = shoppingCartZone.childNodes;
             let totalEntries = 0;
 
-            entries.forEach(obj => {
-                totalEntries += obj.Quantity;
+            shoppingCartEntries.forEach(entry => {
+                console.log(entry);
+                if (entry.nodeType === 1) {
+                    totalEntries++;
+                }
             });
-            return totalEntries;
+            document.getElementById("totalEntries").innerText = totalEntries;
         }
 
-        function drag(ev) {
-            ev.preventDefault();
-        }
+        (() => {
+            document.getElementById('shoppingListZone').addEventListener('dragover',
+                ev => {
+                    ev.preventDefault();
+                    ev.dataTransfer.dropEffect = "move";
+                });
 
-        document.getElementById('shoppingListZone').addEventListener('dragover', ev => {
-            ev.preventDefault();
-            ev.dataTransfer.dropEffect = "move";
-            console.log('dragover');
-        });
+            document.getElementById('shoppingListZone').addEventListener('drop',
+                ev => {
+                    ev.preventDefault();
+                    var data = ev.dataTransfer.getData("text");
+                    document.getElementById('shoppingListZone').appendChild(document.getElementById(data));
+                    updateTotalCost();
+                    updateTotalEntries();
+                });
 
-        document.getElementById('shoppingListZone').addEventListener('drop', ev => {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-            console.log('drop');
-        });
+            document.getElementById("shoppingCartZone").addEventListener('dragover',
+                ev => {
+                    ev.preventDefault();
+                    ev.dataTransfer.dropEffect = "move";
+                });
 
-        document.getElementById("shoppingCartZone").addEventListener('dragover', ev => {
-            ev.preventDefault();
-            ev.dataTransfer.dropEffect = "move";
-            console.log('dragover');
-        });
+            document.getElementById('shoppingCartZone').addEventListener('drop',
+                ev => {
+                    ev.preventDefault();
+                    var data = ev.dataTransfer.getData("text");
+                    document.getElementById('shoppingCartZone').appendChild(document.getElementById(data));
+                    updateTotalCost();
+                    updateTotalEntries();
+                });
 
-        document.getElementById('shoppingCartZone').addEventListener('drop', ev => {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-            console.log('drop');
-        });
-
-        getShoppingList();
+            getShoppingList();
+        })();
     </script>
 }

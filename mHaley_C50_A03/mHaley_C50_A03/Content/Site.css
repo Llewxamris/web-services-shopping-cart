@@ -52,7 +52,7 @@ a:hover {
     grid-template-rows: auto;
     grid-template-areas: 
         "list cart"
-        "totals totals";
+        ". totals";
     grid-column-gap: 10%;
 }
 
