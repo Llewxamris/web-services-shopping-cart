@@ -7,83 +7,92 @@
 
 <h2>Index</h2>
 <div class="gridContainer">
-    <div id="shoppingList">
-        <h2>Shopping List</h2>
-        <div id="shoppingListZone">
-        </div>
+<div id="shoppingList">
+    <h2>Shopping List</h2>
+    <div id="shoppingListZone">
     </div>
+</div>
 
-    <div id="shoppingCart">
-        <h1>Cart</h1>
-        <div id="shoppingCartZone">
-        </div>
+<div id="shoppingCart">
+    <h1>Cart</h1>
+    <div id="shoppingCartZone">
     </div>
+</div>
 
     <div id="totals">
         <h3>Total Items:</h3><span id="totalEntries"></span>
         <h3>Total Price:</h3><span id="totalValue"></span>
     </div>
+    <div id="checkOut">
+        <input type="button" id="btnCheckOut" value="Check Out"/>
 </div>
+    </div>
 
 @section Scripts {
     @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
 
     @* ReSharper disable once Mvc.ControllerNotResolved *@
     <script>
-        //let shoppingEntry = (quantity, productName, productPrice, productCatergory) => {
-        //    this.quantity = quantity;
-        //    this.productName = productName;
-        //    this.productPrice = productPrice;
-        //    this.productCategory = productCatergory;
-        //}
+        let originalShoppingList; // NAUGHTY
 
-        function getShoppingList() {
+        function ShoppingListEntry(quantity, name, price, category) {
+            this.Quantity = quantity;
+            this.ProductName = name;
+            this.ProductPrice = price;
+            this.ProductCategory = category;
+        };
+
+        function displayShoppingList(shoppingListJson) {
+            originalShoppingList = shoppingListJson;
+            shoppingListJson.forEach((obj) => {
+                const entryDiv = document.createElement("div");
+                const quantitySpan = document.createElement("div");
+                const nameSpan = document.createElement("div");
+                const priceSpan = document.createElement("div");
+                const categorySpan = document.createElement("div");
+                const breakTag = document.createElement('br');
+
+                entryDiv.id = obj.ProductName;
+                entryDiv.draggable = true;
+                entryDiv.addEventListener('dragstart',
+                    ev => {
+                        ev.dataTransfer.setData("text/plain", ev.target.id);
+                        ev.dropEffect = 'move';
+                    });
+
+                quantitySpan.className = 'quantity';
+                nameSpan.className = 'productName';
+                priceSpan.className = 'productPrice';
+                categorySpan.className = 'productCategory';
+
+                quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
+                nameSpan.textContent = `Name: ${obj.ProductName}`;
+                priceSpan.textContent = `Price: ${obj.ProductPrice}`;
+                categorySpan.textContent = `Category: ${obj.ProductCategory}`;
+
+
+                entryDiv.appendChild(quantitySpan);
+                entryDiv.appendChild(nameSpan);
+                entryDiv.appendChild(priceSpan);
+                entryDiv.appendChild(categorySpan);
+                entryDiv.appendChild(categorySpan);
+                entryDiv.appendChild(breakTag);
+
+                document.getElementById("shoppingListZone").appendChild(entryDiv);
+            });
+
+
+            document.getElementById("totalValue").innerText = 0.00;
+            document.getElementById("totalEntries").innerText = 0;
+        }
+
+        function getShoppingList(callback) {
             // ReSharper disable once PossiblyUnassignedPropertys
             // ReSharper disable once UseOfImplicitGlobalInFunctionScope
             fetch('@Url.Action("", "api/Rest", new {}, null)')
-                .then(response => {
-                    return response.json();
-                }).then(jsonArr => {
-                    jsonArr.forEach((obj) => {
-                        const entryDiv = document.createElement("div");
-                        const quantitySpan = document.createElement("div");
-                        const nameSpan = document.createElement("div");
-                        const priceSpan = document.createElement("div");
-                        const categorySpan = document.createElement("div");
-                        const breakTag = document.createElement('br');
-
-                        entryDiv.id = obj.ProductName;
-                        entryDiv.draggable = true;
-                        entryDiv.addEventListener('dragstart',
-                            ev => {
-                                ev.dataTransfer.setData("text/plain", ev.target.id);
-                                ev.dropEffect = 'move';
-                            });
-
-                        quantitySpan.className = 'quantity';
-                        nameSpan.className = 'productName';
-                        priceSpan.className = 'productPrice';
-                        categorySpan.className = 'productCategory';
-
-                        quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
-                        nameSpan.textContent = `Name: ${obj.ProductName}`;
-                        priceSpan.textContent = `Price: ${obj.ProductPrice}`;
-                        categorySpan.textContent = `Category: ${obj.ProductCategory}`;
-
-
-                        entryDiv.appendChild(quantitySpan);
-                        entryDiv.appendChild(nameSpan);
-                        entryDiv.appendChild(priceSpan);
-                        entryDiv.appendChild(categorySpan);
-                        entryDiv.appendChild(categorySpan);
-                        entryDiv.appendChild(breakTag);
-
-                        document.getElementById("shoppingListZone").appendChild(entryDiv);
-                    });
-
-
-                    document.getElementById("totalValue").innerText = 0.00;
-                    document.getElementById("totalEntries").innerText = 0;
+                .then(response => response.json())
+                .then(json => {
+                    callback(json);
                 });
         }
 
@@ -157,7 +166,36 @@
                     updateTotalEntries();
                 });
 
-            getShoppingList();
+            document.getElementById('btnCheckOut').addEventListener('click',
+                () => {
+                    getShoppingList(shoppingList => {
+                        if (JSON.stringify(shoppingList) === JSON.stringify(originalShoppingList)) {
+                            const shoppingCart = document
+                                .querySelector('#shoppingCartZone');
+                            console.log(shoppingCart);
+                            const shoppingCartEntries = shoppingCart.childNodes;
+
+                            if (shoppingCartEntries.length === 1) {
+                                return;
+                            }
+                            let xhr;
+                            shoppingCartEntries.forEach(entry => {
+                                if (entry.nodeName === 'DIV') {
+                                    const productName = entry.querySelector('.productName').textContent.split(': ')[1];
+                                    xhr = fetch(`@Url.Action("", "api/Rest", new {}, null)/${productName}`,
+                                        {
+                                            method: 'delete'
+                                        });
+                                }
+                            });
+                            xhr.then(() => location.reload());
+                        } else {
+                            alert('The shopping list has been modified. Please ' +
+                                'refresh the page to get the newest list.');
+                        }
+                    });
+                });
+            getShoppingList(displayShoppingList);
         })();
     </script>
 }

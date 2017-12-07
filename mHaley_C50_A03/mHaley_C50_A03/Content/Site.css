@@ -52,7 +52,8 @@ a:hover {
     grid-template-rows: auto;
     grid-template-areas: 
         "list cart"
-        ". totals";
+        ". totals"
+        ". checkout";
     grid-column-gap: 10%;
 }
 
@@ -71,6 +72,10 @@ a:hover {
 
 #totals {
     grid-area: totals;
+} 
+
+#checkOut {
+    grid-area: checkout;
 }
 
 #totals h3 {
