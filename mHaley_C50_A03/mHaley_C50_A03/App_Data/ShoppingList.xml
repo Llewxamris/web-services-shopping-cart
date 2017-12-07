@@ -1,10 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <shoppingList xmlns="http://tempuri.org/ShoppingList.xsd">
   <shoppingEntry>
-    <quantity>1</quantity>
+    <quantity>5</quantity>
     <product category="Produce">
-      <name>Carrot</name>
-      <price>0.50</price>
+      <name>Apples</name>
+      <price>0.99</price>
+    </product>
+  </shoppingEntry>
+  <shoppingEntry>
+    <quantity>5</quantity>
+    <product category="Produce">
+      <name>Banana</name>
+      <price>0.99</price>
     </product>
   </shoppingEntry>
 </shoppingList>

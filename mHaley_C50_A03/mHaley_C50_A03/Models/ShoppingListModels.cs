@@ -70,6 +70,8 @@ namespace mHaley_C50_A03.Models
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         private static void WriteToXmlFile()
         {
+            // HACK: Forgive me father, for I have sinned
+            try { 
             XElement shoppingListXmlElement = XElement.Load(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
             XNamespace ns = "http://tempuri.org/ShoppingList.xsd";
             shoppingListXmlElement.RemoveAll();
@@ -84,7 +86,12 @@ namespace mHaley_C50_A03.Models
                         new XElement(ns + "price", entry.ProductPrice))));
             });
 
-            shoppingListXmlElement.Save(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+                shoppingListXmlElement.Save(HostingEnvironment.MapPath("~/App_Data/ShoppingList.xml"));
+            }
+            catch (IOException)
+            {
+                WriteToXmlFile();
+            }
         }
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

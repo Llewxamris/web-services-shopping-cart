@@ -29,22 +29,16 @@
     </div>
 
 @section Scripts {
-    @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
-
-    @* ReSharper disable once Mvc.ControllerNotResolved *@
     <script>
         let originalShoppingList; // NAUGHTY
 
-        function ShoppingListEntry(quantity, name, price, category) {
-            this.Quantity = quantity;
-            this.ProductName = name;
-            this.ProductPrice = price;
-            this.ProductCategory = category;
-        };
-
         function displayShoppingList(shoppingListJson) {
-            originalShoppingList = shoppingListJson;
+            /* Using an array of JSON Objects, displays the objects nicely on
+             the web page. */
+            originalShoppingList = shoppingListJson; // Saved for later
+
             shoppingListJson.forEach((obj) => {
+                // Define elements
                 const entryDiv = document.createElement("div");
                 const quantitySpan = document.createElement("div");
                 const nameSpan = document.createElement("div");
@@ -52,6 +46,7 @@
                 const categorySpan = document.createElement("div");
                 const breakTag = document.createElement('br');
 
+                // Define a single entry
                 entryDiv.id = obj.ProductName;
                 entryDiv.draggable = true;
                 entryDiv.addEventListener('dragstart',
@@ -60,17 +55,19 @@
                         ev.dropEffect = 'move';
                     });
 
+                // Define the classes
                 quantitySpan.className = 'quantity';
                 nameSpan.className = 'productName';
                 priceSpan.className = 'productPrice';
                 categorySpan.className = 'productCategory';
 
+                // Define the content
                 quantitySpan.textContent = `Quantity: ${obj.Quantity}`;
                 nameSpan.textContent = `Name: ${obj.ProductName}`;
                 priceSpan.textContent = `Price: ${obj.ProductPrice}`;
                 categorySpan.textContent = `Category: ${obj.ProductCategory}`;
 
-
+                // Append elements to the entry
                 entryDiv.appendChild(quantitySpan);
                 entryDiv.appendChild(nameSpan);
                 entryDiv.appendChild(priceSpan);
@@ -78,123 +75,165 @@
                 entryDiv.appendChild(categorySpan);
                 entryDiv.appendChild(breakTag);
 
-                document.getElementById("shoppingListZone").appendChild(entryDiv);
+                // Append the entry to the page
+                document.getElementById("shoppingListZone")
+                    .appendChild(entryDiv);
             });
 
-
+            // Set the totals to zero
             document.getElementById("totalValue").innerText = 0.00;
             document.getElementById("totalEntries").innerText = 0;
-        }
+        } // displayShoppingList(...)
 
         function getShoppingList(callback) {
+            /* Gets the shopping list via the REST API, takes in a callback
+                function that handles the returned data. */
             // ReSharper disable once PossiblyUnassignedPropertys
             // ReSharper disable once UseOfImplicitGlobalInFunctionScope
+            
+            // URL is defined by razor, deals with possible format errors
             fetch('@Url.Action("", "api/Rest", new {}, null)')
                 .then(response => response.json())
                 .then(json => {
-                    callback(json);
+                    callback(json); // Send data to callback function
                 });
-        }
-
-        function calculateTotalCost(entries) {
-            let totalCost = 0.0;
-
-            entries.forEach(obj => {
-                totalCost += obj.ProductPrice * obj.Quantity;
-            });
-
-            return totalCost;
-        }
+        } // getShoppingList(...)
 
         function updateTotalCost() {
-            const shoppingCartZone = document.getElementById('shoppingCartZone');
+            /* Updates the total cost of the shopping cart. */
+            const shoppingCartZone = document
+                .getElementById('shoppingCartZone');
+            // The current shopping cart entries
             const shoppingCartEntries = shoppingCartZone.childNodes;
             let totalCost = 0.0;
 
             shoppingCartEntries.forEach(entry => {
-                if (entry.nodeType === 1) {
-                    const price = entry.querySelector('.productPrice').innerText.split(' ')[1];
-                    const quantity = entry.querySelector('.quantity').innerText.split(' ')[1];
+                if (entry.nodeType === 1) { // Node type 1's are DOM elements
+                    const price = entry.querySelector('.productPrice').innerText
+                        .split(' ')[1];
+                    const quantity = entry.querySelector('.quantity').innerText
+                        .split(' ')[1];
                     totalCost += parseFloat(price) * parseFloat(quantity);
                 }
             });
-            document.getElementById("totalValue").innerText = totalCost.toFixed(2);
-        }
+            document.getElementById("totalValue").innerText =
+                totalCost.toFixed(2);
+        } // updateTotalCost()
 
         function updateTotalEntries() {
-            const shoppingCartZone = document.getElementById('shoppingCartZone');
+            /* Updates the total entries inside the shopping cart. */
+            const shoppingCartZone = document
+                .getElementById('shoppingCartZone');
             const shoppingCartEntries = shoppingCartZone.childNodes;
             let totalEntries = 0;
 
             shoppingCartEntries.forEach(entry => {
-                if (entry.nodeType === 1) {
+                if (entry.nodeType === 1) { // Node type 1's are DOM elements
                     totalEntries++;
                 }
             });
             document.getElementById("totalEntries").innerText = totalEntries;
-        }
+        } // updateTotalEntries()
 
         (() => {
+            /* The following is immediatly invoked. Used for defining
+                none-programatically added DOM elements' event listeners, and
+                running the initial GET of the shopping list. */
             "use strict";
+
+            // Add 'dragover' listener for the shopping list
             document.getElementById('shoppingListZone').addEventListener('dragover',
                 ev => {
                     ev.preventDefault();
                     ev.dataTransfer.dropEffect = "move";
                 });
 
+            // Add 'drop' listener for the shopping list
             document.getElementById('shoppingListZone').addEventListener('drop',
                 ev => {
                     ev.preventDefault();
                     var data = ev.dataTransfer.getData("text");
-                    document.getElementById('shoppingListZone').appendChild(document.getElementById(data));
+
+                    // Transfer element
+                    document.getElementById('shoppingListZone')
+                        .appendChild(document.getElementById(data));
+                    
+                    // Update the totals
                     updateTotalCost();
                     updateTotalEntries();
                 });
 
+            // Add 'dragover' listener for the shopping cart
             document.getElementById("shoppingCartZone").addEventListener('dragover',
                 ev => {
                     ev.preventDefault();
                     ev.dataTransfer.dropEffect = "move";
                 });
 
+            // Add 'drop' listener for the shopping cart
             document.getElementById('shoppingCartZone').addEventListener('drop',
                 ev => {
                     ev.preventDefault();
                     var data = ev.dataTransfer.getData("text");
-                    document.getElementById('shoppingCartZone').appendChild(document.getElementById(data));
+
+                    // Transfer element
+                    document.getElementById('shoppingCartZone')
+                        .appendChild(document.getElementById(data));
+
+                    // Update the totals
                     updateTotalCost();
                     updateTotalEntries();
                 });
 
+            // Add 'click' listener for the checkout button
             document.getElementById('btnCheckOut').addEventListener('click',
                 () => {
+                    /* The logic for the entire checkout process. Checks for
+                        changes, and calls DELETE on the checkout'd entries. */
+
+                    // Get the current shopping list on disk
                     getShoppingList(shoppingList => {
-                        if (JSON.stringify(shoppingList) === JSON.stringify(originalShoppingList)) {
+                        // Check if the lists are the same
+                        if (JSON.stringify(shoppingList) ===
+                            JSON.stringify(originalShoppingList)) {
                             const shoppingCart = document
                                 .querySelector('#shoppingCartZone');
-                            console.log(shoppingCart);
                             const shoppingCartEntries = shoppingCart.childNodes;
 
+                            // Catch an empty shopping cart
                             if (shoppingCartEntries.length === 1) {
                                 return;
                             }
-                            let xhr;
+
+                            let xhr; // Storage for adding fetch promises
                             shoppingCartEntries.forEach(entry => {
-                                if (entry.nodeName === 'DIV') {
-                                    const productName = entry.querySelector('.productName').textContent.split(': ')[1];
+                                if (entry.nodeName === 'DIV') { // Ignore <br /> tags
+                                    const productName = entry
+                                              .querySelector('.productName')
+                                              .textContent.split(': ')[1];
+
+                                    // Call the DELETE inside the REST API
+                                    // URL is defined by razor, deals with possible format errors
                                     xhr = fetch(`@Url.Action("", "api/Rest", new {}, null)/${productName}`,
                                         {
                                             method: 'delete'
                                         });
                                 }
                             });
+                            // xhr contains the **most recent** fetch request
+                            // made before exiting the loop. I then add a
+                            // promise to that fetch request, that allows me
+                            // to trigger a reload only when the final fetch
+                            // has been completed
                             xhr.then(() => location.reload());
                         } else {
+                            // Catch shopping list changing
                             alert('The shopping list has been modified. Please ' +
                                 'refresh the page to get the newest list.');
                         }
                     });
                 });
+            // Display the actual shopping list
             getShoppingList(displayShoppingList);
         })();
     </script>
