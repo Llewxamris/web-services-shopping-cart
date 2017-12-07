@@ -80,3 +80,9 @@ C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mH
 C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\obj\Debug\mHaley_C50_A04.csprojResolveAssemblyReference.cache
 C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\obj\Debug\mHaley_C50_A03.dll
 C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\obj\Debug\mHaley_C50_A03.pdb
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Net.Http.Formatting.dll
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Web.Http.dll
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Web.Http.WebHost.dll
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Net.Http.Formatting.xml
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Web.Http.xml
+C:\Users\Maxwell Haley\Source\Repos\web-services-shopping-cart\mHaley_C50_A03\mHaley_C50_A03\bin\System.Web.Http.WebHost.xml
