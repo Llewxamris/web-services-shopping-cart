@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://csdev.cegep-heritage.qc.ca/students/rchan/C50/SampleServices/Cities.asmx?wsdl" docRef="http://csdev.cegep-heritage.qc.ca/students/rchan/C50/SampleServices/Cities.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://csdev.cegep-heritage.qc.ca/students/rchan/C50/SampleServices/Cities.asmx" xmlns:q1="http://cegep-heritage.qc.ca/" binding="q1:CitiesSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://csdev.cegep-heritage.qc.ca/students/rchan/C50/SampleServices/Cities.asmx" xmlns:q2="http://cegep-heritage.qc.ca/" binding="q2:CitiesSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

@@ -1,6 +1,57 @@
-﻿
+﻿@using mHaley_C50_A03.CitiesService
+
 @{
-    ViewBag.Title = "Index";
+        ViewBag.Title = "Index";
+
+        var citiesSoap = new CitiesSoapClient();
+        ArrayOfString countries = citiesSoap.GetCountries();
+
+}
+
+@helper CityDdl(string countryCode) {
+
+    @Html.Raw("<select id='ddlCity'>")
+    @Html.Raw("</select>")
+
 }
 
 <h2>Index</h2>
+
+<select id="ddlCountry">
+    @foreach (string country in countries)
+    {
+        @Html.Raw("<option value = \"" + country + "\">" + country + "</option>")
+    }
+</select>
+
+<div id="cities"></div>
+
+<script>
+    document.querySelector('#ddlCountry').addEventListener('change', () => {
+        var countryCode = document.querySelector('#ddlCountry').value;
+        fetch(`/City/GetCities?countryCode=${countryCode}`).then(res => {
+            return res.json();
+        }).then(data => {
+            console.log(data);
+            const citiesSelect = document.createElement('select');
+            const citiesDiv = document.querySelector('#cities');
+            citiesSelect.id = 'ddlCities';
+
+           for(let i in data) { 
+                const cityOption = document.createElement('option');
+                cityOption.textContent = data[i];
+                cityOption.value = i;
+                citiesSelect.append(cityOption);
+            }
+            citiesDiv.append(citiesSelect);
+            citiesSelect.addEventListener('change', () => {
+                
+            });
+         });
+    });
+
+    document.querySelector('#ddlCities').addEventListener('change', () => {
+        const cityCode = document.querySelector('#ddlCities').value;
+        console.log(value);
+    });
+</script>

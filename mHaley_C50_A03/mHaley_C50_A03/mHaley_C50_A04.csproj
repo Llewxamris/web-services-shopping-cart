@@ -84,6 +84,8 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -223,6 +225,11 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ShoppingListModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\CitiesService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +252,7 @@
     <None Include="App_Data\ShoppingList.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -258,6 +266,31 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\shoppingCart.js" />
     <Content Include="Scripts\_references.js" />
+    <None Include="Service References\CitiesService\Cities.disco" />
+    <None Include="Service References\CitiesService\configuration91.svcinfo" />
+    <None Include="Service References\CitiesService\configuration.svcinfo" />
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.CityDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.GetCitiesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.GetCityDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.GetCityWeatherResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CitiesService\mHaley_C50_A03.CitiesService.GetCountriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\CitiesService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -302,8 +335,11 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\City\Index.cshtml" />
+    <None Include="Service References\CitiesService\Cities.wsdl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -313,6 +349,9 @@
     </Content>
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CitiesService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
