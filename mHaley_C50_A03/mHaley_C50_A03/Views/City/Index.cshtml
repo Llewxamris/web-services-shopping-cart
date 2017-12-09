@@ -1,57 +1,113 @@
 ﻿@using mHaley_C50_A03.CitiesService
 
 @{
-        ViewBag.Title = "Index";
+    ViewBag.Title = "City Information";
 
-        var citiesSoap = new CitiesSoapClient();
-        ArrayOfString countries = citiesSoap.GetCountries();
-
-}
-
-@helper CityDdl(string countryCode) {
-
-    @Html.Raw("<select id='ddlCity'>")
-    @Html.Raw("</select>")
+    var citiesSoap = new CitiesSoapClient();
+    ArrayOfString countries = citiesSoap.GetCountries();
 
 }
 
-<h2>Index</h2>
+@Html.Partial("~/Views/Shared/_Header.cshtml")
 
-<select id="ddlCountry">
+<h2>City Information</h2>
+
+<select id="ddlCountry" class="form-control">
     @foreach (string country in countries)
     {
         @Html.Raw("<option value = \"" + country + "\">" + country + "</option>")
     }
 </select>
+<br />
 
 <div id="cities"></div>
 
+<h3>Country Details</h3>
+<div id="details">
+</div>
+
 <script>
+    /* HERE BE NESTING */
     document.querySelector('#ddlCountry').addEventListener('change', () => {
         var countryCode = document.querySelector('#ddlCountry').value;
         fetch(`/City/GetCities?countryCode=${countryCode}`).then(res => {
             return res.json();
         }).then(data => {
             console.log(data);
-            const citiesSelect = document.createElement('select');
             const citiesDiv = document.querySelector('#cities');
+            citiesDiv.innerHTML = "";
+            const citiesSelect = document.createElement('select');
             citiesSelect.id = 'ddlCities';
+            citiesSelect.classList = 'form-control';
 
-           for(let i in data) { 
-                const cityOption = document.createElement('option');
-                cityOption.textContent = data[i];
-                cityOption.value = i;
-                citiesSelect.append(cityOption);
+            for (let i in data) {
+                if (data.hasOwnProperty(i)) {
+                    const cityOption = document.createElement('option');
+                    cityOption.textContent = data[i];
+                    cityOption.value = i;
+                    citiesSelect.append(cityOption);
+                }
             }
+
             citiesDiv.append(citiesSelect);
             citiesSelect.addEventListener('change', () => {
-                
+                const cityCode = document.querySelector('#ddlCities').value;
+                console.log(cityCode);
+                fetch(`City/GetCityDetails?cityCode=${cityCode}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        /* Given more time, it'd be better to dynamically determine
+                            which data I'm looking at during a loop, rather than hard
+                            coding where the data is located. */
+                        const detailsDiv = document.querySelector('#details');
+                        const table = document.createElement('table');
+                        const headerRow = document.createElement('tr');
+                        const headerType = document.createElement('th');
+                        const headerValue = document.createElement('th');
+                        const tableRowLat = document.createElement('tr');
+                        const tableRowLon = document.createElement('tr');
+                        const tableRowTemp = document.createElement('tr');
+                        const latKey = document.createElement('td');
+                        const lonKey = document.createElement('td');
+                        const tempKey = document.createElement('td');
+                        const latValue = document.createElement('td');
+                        const lonValue = document.createElement('td');
+                        const tempValue = document.createElement('td');
+
+                        detailsDiv.innerHTML = "";
+                        table.classList = "table table-condensed";
+
+                        headerType.textContent = "Type";
+                        headerValue.textContent = "Value";
+
+                        latKey.textContent = "Latitude";
+                        lonKey.textContent = "Longitute";
+                        tempKey.textContent = "Temperature";
+
+                        [latValue.textContent, lonValue.textContent, tempValue.textContent] = data;
+
+                        headerRow.append(headerType);
+                        headerRow.append(headerValue);
+
+                        tableRowLat.append(latKey);
+                        tableRowLat.append(latValue);
+
+                        tableRowLon.append(lonKey);
+                        tableRowLon.append(lonValue);
+
+                        tableRowTemp.append(tempKey);
+                        tableRowTemp.append(tempValue);
+
+                        table.append(headerRow);
+                        table.append(tableRowLat);
+                        table.append(tableRowLon);
+                        table.append(tableRowTemp);
+
+                        detailsDiv.append(table);
+                    });
             });
-         });
+        });
     });
 
-    document.querySelector('#ddlCities').addEventListener('change', () => {
-        const cityCode = document.querySelector('#ddlCities').value;
-        console.log(value);
-    });
+
 </script>
